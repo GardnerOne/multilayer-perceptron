@@ -34,7 +34,11 @@ Matrix.prototype.add = function (n) {
 Matrix.prototype.multiply = function (n) {
   for (var i = 0; i < this.rows; i++) {
     for (var j = 0; j < this.cols; j++) {
-      this.matrix[i][j] *= n;
+      if (n instanceof Matrix) {
+        this.matrix[i][j] *= n.matrix[i][j];
+      } else {
+        this.matrix[i][j] *= n;
+      }
     }
   }
 }
