@@ -1,12 +1,7 @@
 function setup() {
-	let a = new Matrix(2, 3);
-	a.randomize();
-	a.print();
-
-	function doubleIt(x) {
-		return x * 2;
-	}
-
-	a.map(doubleIt);
-	a.print();
+	let nn = new NeuralNetwork(2, 2, 1);
+	let inputs = [1, 0];
+	let targets = [1];
+	let output = nn.train(inputs, targets);
+	console.log(output);
 }
