@@ -52,6 +52,16 @@ class Matrix {
     }
   }
 
+  map(func) {
+    // Apply a function to every element of a matrix
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        let value = this.data[i][j];
+        this.data[i][j] = func(value);
+      }
+    }
+  }
+
   print() {
     console.table(this.data);
   }
