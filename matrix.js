@@ -29,12 +29,32 @@ class Matrix {
       }
     }
   }
+
   multiply(n) {
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.cols; j++) {
-        if (n instanceof Matrix) {
-          this.matrix[i][j] *= n.matrix[i][j];
-        } else {
+    if (n instanceof Matrix) {
+      if (this.cols !== n.rows) {
+        console.log("Columns of A must match rows of B");
+        return undefined;
+      }
+
+      let a = this;
+      let b = n;
+      let result = new Matrix(a.rows, b.cols);
+      for (let i = 0; i < result.rows; i++) {
+        for (let j = 0; j < result.cols; j++) {
+          let sum = 0;
+          for (let k = 0; k < a.cols; k++) { // or b.rows
+            // Dot product
+            sum += a.matrix[i][k] * b.matrix[k][j];
+          }
+          result.matrix[i][j] = sum;
+        }
+      }
+      return result;
+    } else {
+      // Scalar product
+      for (let i = 0; i < this.rows; i++) {
+        for (let j = 0; j < this.cols; j++) {
           this.matrix[i][j] *= n;
         }
       }
