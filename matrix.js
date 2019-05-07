@@ -34,21 +34,37 @@ class Matrix {
     }
   }
 
-  transpose() {
-    let result = new Matrix(this.cols, this.rows);
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.cols; j++) {
-        result.data[j][i] = this.data[i][j];
+  static transpose(m) {
+    let result = new Matrix(m.cols, m.rows);
+    for (let i = 0; i < m.rows; i++) {
+      for (let j = 0; j < m.cols; j++) {
+        result.data[j][i] = m.data[i][j];
       }
     }
-    this = result;
+    m = result;
   }
 
   multiply(n) {
-    // Scalar product
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.cols; j++) {
-        this.data[i][j] *= n;
+    if (n instanceof Matrix) {
+      if (this.rows !== n.rows || this.cols !== n.cols) {
+        console.error("Rows and Cols of A must match B");
+        return undefined;
+      }
+      for (let i = 0; i < this.rows; i++) {
+        for (let j = 0; j < this.cols; j++) {
+          let sum = 0;
+          for (let k = 0; k < this.cols; k++) {
+            sum += this.data[i][k] * n.data[k][j];
+          }
+          this.data[i][j] = sum;
+        }
+      }
+    } else {
+      // Scalar product
+      for (let i = 0; i < this.rows; i++) {
+        for (let j = 0; j < this.cols; j++) {
+          this.data[i][j] *= n;
+        }
       }
     }
   }
@@ -75,6 +91,19 @@ class Matrix {
       }
     }
     return arr;
+  }
+
+  static map(matrix, func) {
+    let result = new Matrix(matrix.rows, matrix.cols);
+
+    // Element-wise function application
+    for (let i = 0; i < matrix.rows; i++) {
+      for (let j = 0; j < matrix.cols; j++) {
+        let value = matrix.data[i][j];
+        result.data[i][j] = func(value);
+      }
+    }
+    return result;
   }
 
   static subtract(a, b) {
